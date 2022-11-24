@@ -21,3 +21,18 @@ npm start
 
 ## Other
 Read Readme from https://github.com/Gimenz/tiktok-downloader for more details.
+
+## Run this program from github
+1. Make sure you are logged in to GitHub
+2. Click Code > Codespaces > Create code space on main
+![image](https://user-images.githubusercontent.com/54830824/203767600-918c2f20-6870-4887-9996-7aa1676c7534.png)
+3. Open terminal and run this code
+```
+npm install
+```
+4. Edit cookie file and paste you cookie
+5. Start program
+```
+npm start
+```
+6. Enjoy
