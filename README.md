@@ -12,7 +12,7 @@ git clone https://github.com/arifals27/tiktok-downloader-v2.git
 
 npm install
 ```
-2. Edit file *cookie* and paste your cookie from plugin *Copy Cookies* chrome extention.
+2. Edit file **cookie** and paste your cookie from plugin **Copy Cookies** chrome extention.
 3. Run this code
 ```
 npm start
