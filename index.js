@@ -110,7 +110,8 @@ if (fs.readFileSync('cookie', 'utf-8') == '') return console.log(chalk.red('[Err
                         for (let i = 0; i < videoResults.length; i++) {
                             videoIds.push({
                                 index: index,
-                                id: videoResults[i].video.id
+                                id: videoResults[i].video.id,
+                                desc: videoResults[i].desc
                             })
                             index++
                         }
