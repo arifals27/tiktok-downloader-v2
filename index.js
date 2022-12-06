@@ -66,7 +66,22 @@ if (fs.readFileSync('cookie', 'utf-8') == '') return console.log(chalk.red('[Err
                 .then(answers => {
                     return answers.value
                 })
-
+            const limitx = await inquirer
+                .prompt([{
+                    name: 'limit',
+                    message: `Limit download 1 - ${selected.user_info.aweme_count} : `
+                },])
+                .then(answers => {
+                    return parseInt(answers && answers.limit && answers.limit <= selected.user_info.aweme_count && answers.limit > 0 ? answers.limit : selected.user_info.aweme_count > 30 ? 30 : selected.user_info.aweme_count);
+                });
+            let startIndex = await inquirer
+                .prompt([{
+                    name: 'awalan',
+                    message: `Start from (1 - ${selected.user_info.aweme_count}) video : `
+                },])
+                .then(answers => {
+                    return parseInt(answers && answers.awalan && answers.awalan < limitx && answers.awalan > 0 ? answers.awalan-1 : 0);
+                });
             if (validate) {
                 correct = true
                 let videoIds = []
@@ -74,17 +89,28 @@ if (fs.readFileSync('cookie', 'utf-8') == '') return console.log(chalk.red('[Err
                 let cursor = 0
                 let index = 1
                 let done = false
+                let currentTotal = 0
                 while (!done) {
                     const videoList = await getVideoList(selected.user_info.sec_uid, 30, cursor)
-                    if (videoList !== undefined) {
+                    let videoResults = videoList.itemList;
+                    if (videoList !== undefined || videoList.length > 0) {
+                        currentTotal += videoList.itemList.length;
+                        if(startIndex > 0) {
+                            videoResults = videoResults.slice(startIndex)
+                            startIndex = 0;
+                        }
+                        if(currentTotal > limitx){
+                            const deff = currentTotal-limitx;
+                            videoResults = videoResults.slice(0, -deff)
+                        }
                         const hasMore = videoList.hasMore
-                        console.log('hasMore :', hasMore, '|', videoList.itemList.length, 'videos');
+                        console.log('hasMore :', hasMore, '|', videoResults.length, 'videos');
                         cursor = videoList.cursor
-                        done = !hasMore
-                        for (let i = 0; i < videoList.itemList.length; i++) {
+                        done = currentTotal >= limitx
+                        for (let i = 0; i < videoResults.length; i++) {
                             videoIds.push({
                                 index: index,
-                                id: videoList.itemList[i].video.id
+                                id: videoResults[i].video.id
                             })
                             index++
                         }
