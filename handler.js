@@ -83,9 +83,10 @@ class Downloader {
     }
 
     singleFile = async (link, cb) => {
+        const videoTitle = link.desc.length > 0 ? link.desc : link.id;
         // console.log(this.taskDone);
-        if (fs.existsSync(path.resolve(__dirname, 'download', this.folder, `${link.id}.mp4`))) {
-            console.log(`[ ${chalk.hex('#f12711')(link.id)} already downloaded! ] ===== [${chalk.hex('#7F7FD5')('skipped')}]`);
+        if (fs.existsSync(path.resolve(__dirname, 'download', this.folder, `${videoTitle}.mp4`))) {
+            console.log(`[ ${chalk.hex('#f12711')(videoTitle)} already downloaded! ] ===== [${chalk.hex('#7F7FD5')('skipped')}]`);
             this.q.remove(x => x.data.id == link.id)
             this.q.resume()
         } else {
@@ -99,7 +100,7 @@ class Downloader {
                 }).then(async ({ data, headers }) => {
                     const totalLength = headers['content-length']
 
-                    const progressBar = new ProgressBar(`[${chalk.hex('#99f2c8')(link.index)}] [ ${chalk.hex('#ffff1c')(link.id)} ] [${chalk.hex('#6be585')(':bar')}] :percent downloaded in :elapseds`, {
+                    const progressBar = new ProgressBar(`[${chalk.hex('#99f2c8')(link.index)}] [ ${chalk.hex('#ffff1c')(videoTitle)} ] [${chalk.hex('#6be585')(':bar')}] :percent downloaded in :elapseds`, {
                         width: 40,
                         complete: '<',
                         incomplete: '•',
@@ -120,11 +121,11 @@ class Downloader {
                         this.q.resume()
                         this.taskDone = this.taskDone + 1
                     })
-                    const writer = fs.createWriteStream(path.resolve(__dirname, 'download', foldername, `${link.id}.mp4`))
+                    const writer = fs.createWriteStream(path.resolve(__dirname, 'download', foldername, `${videoTitle}.mp4`))
                     data.pipe(writer)
                 })
             } catch (error) {
-                console.log(`[ ${chalk.hex('#f12711')(link.id)} got error while trying to get video data! ] ===== [${chalk.hex('#7F7FD5')('skipped')}]`);
+                console.log(`[ ${chalk.hex('#f12711')(videoTitle)} got error while trying to get video data! ] ===== [${chalk.hex('#7F7FD5')('skipped')}]`);
                 this.q.resume()
             }
         }
