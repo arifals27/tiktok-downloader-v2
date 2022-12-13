@@ -83,7 +83,7 @@ class Downloader {
     }
 
     singleFile = async (link, cb) => {
-        const videoTitle = link.desc.length > 0 ? link.desc.replace(/['":;/\\]+/g, '') : link.id;
+        const videoTitle = link.desc.length > 0 ? link.desc.replace(/['":*?<|>/\\]+/g, '') : link.id;
         // console.log(this.taskDone);
         if (fs.existsSync(path.resolve(__dirname, 'download', this.folder, `${videoTitle}.mp4`))) {
             console.log(`[ ${chalk.hex('#f12711')(videoTitle)} already downloaded! ] ===== [${chalk.hex('#7F7FD5')('skipped')}]`);
